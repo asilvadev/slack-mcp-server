@@ -27,7 +27,7 @@ WORKDIR /app/mcp-server
 
 EXPOSE 13080
 
-CMD ["mcp-server", "--transport", "sse"]
+CMD ["mcp-server", "--transport", "stdio"]
 
 FROM alpine:3.22 AS production
 
@@ -39,4 +39,4 @@ WORKDIR /app
 
 EXPOSE 13080
 
-CMD ["mcp-server", "--transport", "sse"]
+CMD ["mcp-server", "--transport", "stdio"]
