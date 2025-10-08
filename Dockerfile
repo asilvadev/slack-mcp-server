@@ -25,7 +25,7 @@ RUN --mount=type=cache,id=s/75ead2a8-dd36-47e9-bdec-cdd2d485bf69-/go/pkg/mod,tar
 
 WORKDIR /app/mcp-server
 
-EXPOSE 3001
+EXPOSE 13080
 
 CMD ["mcp-server", "--transport", "sse"]
 
@@ -37,6 +37,6 @@ COPY --from=build /go/bin/mcp-server /usr/local/bin/mcp-server
 
 WORKDIR /app
 
-EXPOSE 3001
+EXPOSE 13080
 
 CMD ["mcp-server", "--transport", "sse"]
