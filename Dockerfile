@@ -1,4 +1,4 @@
-# syntax=docker/dockerfile:1.5
+# syntax=docker/dockerfile:1.7
 
 FROM golang:1.24 AS build
 
@@ -12,20 +12,20 @@ WORKDIR /app
 
 COPY go.mod go.sum ./
 
-# Cache de dependências do Go
-RUN --mount=type=cache,id=cache:go-mod-${TARGETARCH},target=/go/pkg/mod \
+# ✅ Cache de módulos Go (sem variáveis no ID)
+RUN --mount=type=cache,id=go-mod-cache,target=/go/pkg/mod \
     go mod download
 
 COPY . .
 
-# Build do binário (usa cache separado)
-RUN --mount=type=cache,id=cache:go-build-${TARGETARCH},target=/root/.cache/go-build \
+# ✅ Cache de build separado
+RUN --mount=type=cache,id=go-build-cache,target=/root/.cache/go-build \
     go build -ldflags="-s -w" -o /go/bin/mcp-server ./cmd/slack-mcp-server
 
-# Ambiente de desenvolvimento (com Delve)
+# Ambiente de desenvolvimento
 FROM build AS dev
 
-RUN --mount=type=cache,id=cache:go-tools-${TARGETARCH},target=/go/pkg/mod \
+RUN --mount=type=cache,id=go-tools-cache,target=/go/pkg/mod \
     go install github.com/go-delve/delve/cmd/dlv@v1.25.0 && cp /go/bin/dlv /dlv
 
 WORKDIR /app/mcp-server
