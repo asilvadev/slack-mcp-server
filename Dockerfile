@@ -11,7 +11,7 @@ WORKDIR /app
 
 COPY go.mod go.sum ./
 
-RUN --mount=type=cache,target=/go/pkg/mod go mod download
+RUN --mount=type=cache,id=npm-cache,target=/go/pkg/mod go mod download
 
 COPY . /app
 
